@@ -2,6 +2,10 @@
 
 交通事故の示談金が適正か、LINEで弁護士に確認できるスマートフォン向けランディングページです。
 
+## Live site
+
+https://aeru-traffic-accident-lp.pages.dev/
+
 ## Files
 
 - `index.html` — 公開用ページ
