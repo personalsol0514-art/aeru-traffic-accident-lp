@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>示談金無料チェック｜ハイブリッドFV案</title>
+  <style>
+    :root { --navy:#062d62; --blue:#1477b8; --deep:#07558f; --red:#d31319; --yellow:#ffe600; --green:#06b957; }
+    * { box-sizing:border-box; }
+    html { background:#d9dcdf; }
+    body { margin:0; color:#15191f; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif; font-weight:700; }
+    .page { width:min(100%,402px); min-height:100vh; margin:0 auto; overflow:hidden; background:#fff; box-shadow:0 0 30px rgb(0 0 0/.2); }
+
+    .header { height:72px; padding:9px 13px; display:flex; align-items:center; gap:11px; color:var(--navy); background:#fff; }
+    .logo { width:46px; height:46px; display:grid; place-items:center; flex:0 0 auto; color:#fff; background:var(--navy); border-radius:50%; font-size:21px; font-weight:900; }
+    .office { font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:19px; font-weight:900; letter-spacing:.045em; line-height:1.05; }
+    .office small { display:block; margin-top:5px; font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic",sans-serif; font-size:9px; letter-spacing:.14em; }
+    .menu { width:39px; height:39px; margin-left:auto; display:grid; place-content:center; gap:5px; border:1px solid #cbd1d7; border-radius:3px; }
+    .menu i { width:17px; height:2px; display:block; background:var(--navy); }
+
+    .team-photo { position:relative; height:286px; overflow:hidden; background:url("assets/fv-team-hybrid.png") center center/cover no-repeat; }
+    .team-photo::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgb(2 34 74/.35),transparent 30%,transparent 70%,rgb(2 34 74/.72)); pointer-events:none; }
+    .target { position:absolute; z-index:2; top:12px; left:0; padding:8px 23px 8px 13px; color:#fff; background:var(--navy); clip-path:polygon(0 0,100% 0,92% 100%,0 100%); font-size:13px; font-weight:900; }
+    .team-caption { position:absolute; z-index:2; right:11px; bottom:10px; color:#fff; font-size:13px; text-align:right; text-shadow:0 2px 3px #000; }
+    .team-caption b { display:block; font-size:18px; }
+
+    .message { position:relative; padding:16px 18px 15px; background:#fff; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; }
+    .message .intro { margin:0 0 6px; padding-bottom:7px; border-bottom:1px solid #5e6872; font-size:14px; }
+    .message h1 { margin:0; color:#10161e; font-size:30px; line-height:1.2; letter-spacing:-.05em; font-weight:900; }
+    .message h1 .blue { color:var(--blue); }
+    .message h1 .red { display:block; margin-top:5px; color:var(--red); font-size:23px; letter-spacing:-.06em; white-space:nowrap; }
+    .message .lead { margin:8px 0 0; font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic",sans-serif; color:#344152; font-size:12px; line-height:1.5; }
+
+    .check-panel { padding:15px 20px 16px; color:#fff; background:linear-gradient(150deg,var(--blue),var(--deep)); }
+    .check-panel h2 { margin:0 0 11px; color:#fff; font-size:18px; line-height:1.3; text-align:center; }
+    .check-panel h2 strong { color:var(--yellow); font-size:25px; }
+    .check-list { display:grid; gap:8px; }
+    .check-item { display:flex; align-items:center; gap:10px; font-size:17px; line-height:1.2; }
+    .checkmark { width:25px; height:25px; display:grid; place-items:center; flex:0 0 auto; color:#fff; background:#55b9e7; font-size:19px; font-weight:900; }
+    .check-item b { color:var(--yellow); font-size:20px; }
+
+    .offer { position:relative; padding:15px 12px 10px; background:#4295c6; text-align:center; }
+    .offer .yellow-box { display:inline-block; min-width:88%; padding:10px 12px; color:#111; background:var(--yellow); border:2px solid #fff; box-shadow:0 3px 0 rgb(0 0 0/.16); font-size:20px; }
+    .offer p { margin:9px 0 0; color:#fff; font-size:14px; }
+    .legal { padding:6px 7px; color:#202731; background:#fff; font-size:8px; line-height:1.4; text-align:center; }
+
+    .case-section { padding:22px 0 36px; overflow:hidden; background:#eef5f9; }
+    .section-heading { margin:0 0 13px; color:var(--navy); text-align:center; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:25px; line-height:1.15; }
+    .section-heading small { display:block; margin-bottom:3px; color:var(--blue); font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic",sans-serif; font-size:10px; letter-spacing:.18em; }
+    .section-heading::after { content:""; display:block; width:48px; height:3px; margin:7px auto 0; background:var(--red); }
+    .carousel-wrap { position:relative; }
+    .case-viewport { overflow-x:auto; padding:0 0 8px; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .case-viewport::-webkit-scrollbar { display:none; }
+    .case-track { display:flex; gap:14px; width:max-content; padding:0 37px; }
+    .case-slide { flex:0 0 calc(min(100vw,402px) - 74px); height:508px; overflow:hidden; scroll-snap-align:center; background:#fff; border:1px solid #d3dce4; box-shadow:0 8px 22px rgb(13 54 91/.15); }
+    .case-head { min-height:112px; box-sizing:border-box; padding:8px 11px 7px; border-bottom:2px solid #2868c7; }
+    .case-meta { display:flex; align-items:center; gap:8px; margin-bottom:5px; color:#43556b; font-size:10px; }
+    .case-meta b { min-width:52px; padding:4px 6px; color:#fff; background:#075793; text-align:center; }
+    .case-head h3 { margin:0; color:#2161bf; font-size:15px; line-height:1.35; }
+    .accident-line { margin:5px 0 0; padding:5px 7px; color:#43556a; background:#eef4f8; font-size:9px; line-height:1.3; }
+    .case-data { padding:8px 12px 4px; }
+    .data-row { display:grid; grid-template-columns:1fr 1fr; min-height:43px; background:#f1f2f4; border-bottom:2px solid #fff; }
+    .data-row span { display:grid; place-items:center; padding:5px; color:#455365; font-size:10px; line-height:1.2; text-align:center; }
+    .data-row strong { display:grid; place-items:center; padding:5px; color:#26374a; border-left:2px solid #fff; font-family:Arial,Helvetica,"Roboto",sans-serif; font-size:18px; font-variant-numeric:tabular-nums; text-align:center; white-space:nowrap; }
+    .down-arrow { width:0; height:0; margin:6px auto; border-left:23px solid transparent; border-right:23px solid transparent; border-top:16px solid #2868c7; }
+    .result-box { display:grid; grid-template-columns:1fr 1.25fr; align-items:center; min-height:57px; margin:0 12px; background:#edf5fa; }
+    .result-box span { padding:7px 5px; color:#405268; font-size:10px; line-height:1.2; text-align:center; white-space:nowrap; }
+    .result-box strong { padding:6px 7px; color:#f25a43; border-bottom:2px solid #266aa9; font-family:Arial,Helvetica,"Roboto",sans-serif; font-size:25px; font-variant-numeric:tabular-nums; text-align:center; white-space:nowrap; }
+    .mini-chart { position:relative; height:129px; margin:8px 17px 32px; display:flex; align-items:flex-end; justify-content:center; gap:25px; border-bottom:2px solid #b7c0c8; }
+    .mini-bar { position:relative; width:67px; display:grid; align-content:end; justify-items:center; color:#fff; font-weight:900; text-align:center; }
+    .mini-bar.before { height:45px; background:#b4b7bb; color:#313942; }
+    .mini-bar.after { height:105px; background:linear-gradient(#fa634e,#ed543f); }
+    .mini-bar b { font-family:Arial,Helvetica,"Roboto",sans-serif; font-size:19px; font-variant-numeric:tabular-nums; line-height:1; }
+    .mini-bar small { font-size:9px; }
+    .mini-bar em { position:absolute; bottom:-25px; width:90px; color:#3d4854; font-size:10px; font-style:normal; line-height:1.15; white-space:nowrap; }
+    .up-balloon { position:absolute; z-index:2; top:4px; left:7px; width:64px; height:64px; display:grid; place-items:center; color:#fff; background:#c5a64c; border-radius:50%; font-family:Arial,Helvetica,"Roboto",sans-serif; font-size:12px; font-variant-numeric:tabular-nums; line-height:1.05; text-align:center; font-weight:900; }
+    .up-balloon::after { content:""; position:absolute; right:0; bottom:3px; border-left:15px solid #c5a64c; border-top:9px solid transparent; border-bottom:9px solid transparent; transform:rotate(35deg); }
+    .placeholder .case-head h3 { color:#60738b; }
+    .placeholder .result-box strong { color:#7790a5; }
+    .placeholder .mini-bar.after { background:linear-gradient(#83a9c5,#638aa8); }
+    .carousel-button { position:absolute; z-index:5; top:45%; width:36px; height:36px; display:grid; place-items:center; color:#2868c7; background:rgb(255 255 255/.88); border:0; border-radius:50%; box-shadow:0 2px 8px rgb(0 0 0/.15); font-size:26px; cursor:pointer; }
+    .carousel-button.prev { left:7px; }
+    .carousel-button.next { right:7px; }
+    .carousel-dots { display:flex; justify-content:center; gap:7px; margin:10px 0 0; }
+    .carousel-dot { width:8px; height:8px; padding:0; border:0; border-radius:50%; background:#c8cdd2; }
+    .carousel-dot.active { background:#3976d0; transform:scale(1.15); }
+    .case-note { margin:9px 19px 0; color:#68737e; font-size:8px; line-height:1.35; }
+
+    .benefit-section { background:#e9f7ff; }
+    .benefit-hero { position:relative; padding:67px 18px 29px; overflow:hidden; background:#fff; text-align:center; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; }
+    .benefit-hero::before { content:""; position:absolute; top:0; left:0; right:0; height:48px; background:var(--navy); clip-path:polygon(0 0,100% 0,100% 12px,58% 12px,50% 48px,42% 12px,0 12px); }
+    .benefit-hero::after { content:"⚖"; position:absolute; top:11px; right:21px; color:#20acd1; font-family:Arial,sans-serif; font-size:43px; line-height:1; transform:rotate(8deg); text-shadow:2px 2px 0 #fff; }
+    .benefit-kicker { margin:0 0 8px; color:#10161c; font-size:20px; font-weight:900; text-decoration:underline; text-decoration-color:var(--yellow); text-decoration-thickness:6px; text-underline-offset:-2px; }
+    .benefit-title { margin:0; color:#10161c; font-size:26px; line-height:1.35; letter-spacing:-.04em; }
+    .benefit-title .red { color:var(--red); font-size:42px; line-height:1; }
+    .benefit-title .marker { background:linear-gradient(transparent 75%,var(--yellow) 75%); }
+    .benefit-body { padding:26px 18px 31px; text-align:center; }
+    .benefit-stop { margin:0 0 11px; color:#242b32; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:16px; font-weight:900; }
+    .benefit-consult { margin:0 0 22px; color:#f06b3b; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:20px; font-weight:900; }
+    .benefit-consult .consult-main { display:block; margin-top:4px; font-size:24px; line-height:1.35; letter-spacing:-.04em; }
+    .benefit-copy { margin:0 auto 22px; color:#283540; font-size:13px; line-height:1.9; text-align:left; }
+    .benefit-reason { display:inline; color:#ef6938; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:18px; font-weight:900; line-height:1.8; text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:3px; }
+    .benefit-detail { margin:22px 0 21px; color:#354450; font-size:12px; line-height:1.8; text-align:left; }
+    .criteria { display:grid; gap:0; margin:15px 0 0; text-align:left; }
+    .criterion { min-height:78px; display:grid; grid-template-columns:54px 1fr; align-items:center; gap:12px; padding:11px 15px; color:#225b80; background:#fff; border:1px solid #bbd7e8; border-radius:8px; box-shadow:0 4px 12px rgb(22 78 112/.09); }
+    .criterion-number { width:42px; height:42px; display:grid; place-items:center; color:#fff; background:#79b9d9; border-radius:50%; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:900; }
+    .criterion-text strong { display:block; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:17px; line-height:1.25; }
+    .criterion-text small { display:block; margin-top:3px; color:#667986; font-size:10px; line-height:1.35; font-weight:700; }
+    .criterion-arrow { position:relative; height:28px; }
+    .criterion-arrow::before { content:""; position:absolute; top:0; left:50%; width:3px; height:17px; transform:translateX(-50%); background:#58a5ce; }
+    .criterion-arrow::after { content:""; position:absolute; left:50%; bottom:1px; transform:translateX(-50%); border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #58a5ce; }
+    .criterion.featured { min-height:91px; color:#fff; background:linear-gradient(135deg,#0d73b5,#073c74); border:2px solid #f4cf4e; box-shadow:0 7px 18px rgb(5 55 99/.2); }
+    .criterion.featured .criterion-number { color:var(--navy); background:#ffe16a; }
+    .criterion.featured .criterion-text strong { font-size:20px; }
+    .criterion.featured .criterion-text small { color:#e4f3ff; }
+    .criteria-caption { margin:14px 0 0; color:#5f6c77; font-size:9px; line-height:1.5; }
+
+    .compare-section { padding:36px 14px 41px; background:linear-gradient(180deg,#f4f7f9 0%,#fff 100%); border-top:1px solid #dbe7ee; }
+    .compare-heading { margin:0 0 8px; color:var(--navy); text-align:center; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:27px; line-height:1.3; }
+    .compare-heading .red { color:var(--red); font-size:31px; }
+    .compare-lead { margin:0 0 19px; color:#4b5c69; font-size:11px; line-height:1.6; text-align:center; }
+    .compare-cards { display:grid; grid-template-columns:64px 35fr 55fr; gap:6px; align-items:end; }
+    .compare-labels { display:grid; grid-template-rows:69px repeat(3,94px); height:355px; padding:2px 0; }
+    .compare-label-spacer { background:transparent; }
+    .compare-side-label { display:grid; place-items:center; padding:6px 3px; color:#374651; background:#fff; border-bottom:1px solid #d8dde1; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:11px; font-weight:900; line-height:1.35; text-align:center; }
+    .compare-side-label:first-of-type { border-top:1px solid #d8dde1; }
+    .compare-card { position:relative; display:grid; grid-template-rows:43px repeat(3,94px); height:329px; overflow:hidden; background:#fff; border:2px solid #aab3ba; border-radius:5px; box-shadow:0 7px 18px rgb(14 62 99/.09); }
+    .compare-card.lawyer-card { grid-template-rows:69px repeat(3,94px); height:355px; border-color:#11a8df; }
+    .compare-card-title { width:100%; height:100%; min-height:0; display:grid; place-items:center; margin:0; padding:7px 4px; color:#fff; background:#8c9296; font-size:12px; font-weight:900; text-align:center; }
+    .lawyer-card .compare-card-title { background:linear-gradient(135deg,#09a7dd,#0874bd); font-size:17px; }
+    .compare-visual { min-height:112px; display:grid; place-items:center; align-content:center; gap:5px; padding:12px 5px 9px; background:#f7f8f9; }
+    .lawyer-card .compare-visual { background:#effaff; }
+    .compare-bubble { position:relative; padding:5px 8px; color:#36434d; background:#fff; border:1px solid #d4dadd; border-radius:5px; font-size:10px; font-weight:900; }
+    .compare-bubble::after { content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%); border-left:6px solid transparent; border-right:6px solid transparent; border-top:7px solid #d4dadd; }
+    .lawyer-card .compare-bubble { color:#0b6299; border-color:#85ccec; }
+    .compare-person { position:relative; width:38px; height:47px; border-radius:20px 20px 7px 7px; background:#9aa2a8; }
+    .compare-person::before { content:""; position:absolute; top:-7px; left:10px; width:18px; height:18px; background:#e8bd99; border-radius:50%; }
+    .compare-person::after { content:""; position:absolute; top:21px; left:15px; border-left:5px solid transparent; border-right:5px solid transparent; border-top:17px solid #fff; }
+    .lawyer-card .compare-person { background:#0a4d86; }
+    .compare-item { min-height:0; display:grid; align-content:center; gap:5px; padding:9px 5px; border-top:1px solid #e0e5e8; text-align:center; }
+    .compare-item small { color:#687680; font-size:9px; font-weight:700; }
+    .compare-item strong { color:#3d484f; font-size:10px; line-height:1.45; }
+    .lawyer-card .compare-item strong { color:#075f9a; font-size:13px; }
+    .lawyer-card .compare-item .orange { color:#ef6b35; font-size:14px; }
+    .compare-item .good { display:inline-grid; width:18px; height:18px; margin:0 auto; place-items:center; color:#fff; background:#0da9dc; border-radius:50%; font-family:Arial,sans-serif; font-size:12px; }
+    .compare-note { margin:12px 4px 0; color:#64727d; font-size:9px; font-weight:500; line-height:1.55; }
+
+    .rider-section { position:relative; padding:38px 17px 43px; overflow:hidden; color:#fff; background:linear-gradient(145deg,#073c74 0%,#075c98 62%,#0c78b4 100%); text-align:center; }
+    .rider-section::before { content:""; position:absolute; width:190px; height:190px; top:-90px; right:-75px; border:28px solid rgb(255 255 255/.06); border-radius:50%; }
+    .rider-eyebrow { position:relative; margin:0 0 9px; color:#cfeeff; font-size:11px; letter-spacing:.16em; }
+    .rider-heading { position:relative; margin:0; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:24px; line-height:1.35; }
+    .rider-heading .yellow { color:var(--yellow); }
+    .rider-zero { position:relative; display:inline-flex; align-items:flex-end; gap:8px; margin:10px 0 7px; color:#fff; font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; font-weight:900; line-height:1; }
+    .rider-zero strong { display:inline-block; color:#ffe356; font-family:"Yu Mincho","Hiragino Mincho ProN","Hiragino Mincho Pro",serif; font-size:50px; letter-spacing:0; line-height:1.08; white-space:nowrap; font-variant-numeric:tabular-nums; text-shadow:0 3px 0 rgb(0 0 0/.13); }
+    .rider-zero span { padding-bottom:6px; font-size:16px; white-space:nowrap; }
+    .rider-copy { position:relative; margin:0 auto 18px; font-size:12px; line-height:1.65; font-weight:700; }
+    .rider-limits { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .rider-limit { padding:13px 8px 12px; color:var(--navy); background:#fff; border-radius:8px; box-shadow:0 5px 14px rgb(0 0 0/.15); }
+    .rider-limit small { display:block; margin-bottom:3px; color:#4d667a; font-size:10px; }
+    .rider-limit strong { color:var(--red); font-family:Arial,Helvetica,sans-serif; font-size:28px; font-variant-numeric:tabular-nums; }
+    .rider-limit span { font-size:12px; }
+    .rider-check { position:relative; margin:15px 0 0; padding:10px 12px; color:#123c65; background:#ffe356; border-radius:4px; font-size:14px; font-weight:900; }
+    .rider-note { position:relative; margin:11px 0 0; color:#d8edf9; font-size:8px; font-weight:500; line-height:1.55; text-align:left; }
+
+    .steps-section { padding:38px 14px 16px; background:linear-gradient(180deg,#f1faff 0%,#e6f5fd 100%); }
+    .steps-heading { margin:0 0 7px; color:var(--navy); text-align:center; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:30px; line-height:1.25; letter-spacing:-.04em; }
+    .steps-heading::after { content:""; display:block; width:240px; height:8px; margin:-7px auto 0; background:#ffe269; opacity:.9; }
+    .steps-eyebrow { display:flex; align-items:center; justify-content:center; gap:13px; margin:0 0 12px; color:var(--navy); font-family:Georgia,serif; font-size:11px; letter-spacing:.22em; }
+    .steps-eyebrow::before,.steps-eyebrow::after { content:""; width:45px; height:1px; background:#5c7897; }
+    .steps-lead { margin:0 0 22px; color:#152f54; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:18px; text-align:center; }
+    .steps-list { display:grid; gap:0; }
+    .step-card { position:relative; min-height:164px; display:grid; grid-template-columns:64px minmax(0,1fr) 108px; align-items:center; gap:9px; padding:14px 10px 14px 14px; overflow:hidden; background:#fff; border:1px solid #d6e8f2; border-radius:13px; box-shadow:0 6px 18px rgb(30 93 132/.1); }
+    .step-copy { position:relative; z-index:2; min-width:0; }
+    .step-badge { width:64px; height:64px; display:grid; place-content:center; color:#fff; background:var(--navy); border-radius:50%; font-family:Georgia,serif; font-size:11px; line-height:1.05; text-align:center; }
+    .step-badge strong { display:block; font-size:25px; }
+    .step-card h3 { display:inline; margin:0; color:var(--navy); font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:17px; line-height:1.35; letter-spacing:-.055em; background:linear-gradient(transparent 72%,#ffe269 72%); }
+    .step-card p { margin:10px 0 0; color:#25394c; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:12px; line-height:1.55; }
+    .step-visual { align-self:center; width:108px; height:136px; object-fit:contain; object-position:center; }
+    .step-visual.one { transform:scale(1.18); transform-origin:center right; }
+    .step-visual.three { width:118px; margin-left:-10px; transform:scale(1.3); transform-origin:center right; }
+    .step-connector { position:relative; height:38px; }
+    .step-connector::before { content:""; position:absolute; top:2px; left:50%; width:4px; height:20px; transform:translateX(-50%); background:repeating-linear-gradient(to bottom,#68b2df 0 4px,transparent 4px 8px); }
+    .step-connector::after { content:""; position:absolute; left:50%; bottom:4px; transform:translateX(-50%); border-left:9px solid transparent; border-right:9px solid transparent; border-top:11px solid #68b2df; }
+    .steps-assurance { display:flex; align-items:center; justify-content:center; gap:7px; margin:17px 0 11px; padding:0; color:#42586d; background:transparent; border:0; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:11px; font-weight:700; line-height:1.4; }
+    .steps-assurance::before { content:"✓"; width:17px; height:17px; box-sizing:border-box; display:grid; place-items:center; flex:0 0 auto; color:#fff; background:#1765ad; border:2px solid #1765ad; border-radius:2px; font-family:Arial,sans-serif; font-size:12px; line-height:1; }
+    .steps-cta { position:relative; min-height:66px; display:flex; align-items:center; justify-content:center; gap:10px; color:#fff; background:linear-gradient(#45cd6c,#1fa84d); border-radius:33px; box-shadow:0 7px 15px rgb(9 126 58/.18); font-size:20px; font-weight:900; text-decoration:none; }
+    .steps-cta .chat-icon { width:38px; height:38px; display:grid; place-items:center; color:#27af52; background:#fff; border-radius:50%; font-size:18px; letter-spacing:-.12em; }
+    .steps-cta::after { content:"›"; position:absolute; right:18px; font-size:34px; font-weight:400; }
+
+    .post-line { --pl-navy:#073568; --pl-blue:#158ac7; --pl-pale:#eaf7ff; --pl-yellow:#ffe04d; --pl-orange:#ef6d37; --pl-green:#13b958; color:#17283b; background:#fff; font-weight:700; }
+    .post-line .serif { font-family:"Yu Mincho","Hiragino Mincho ProN",serif; }
+    .post-line .eyebrow { margin:0; color:var(--pl-blue); font-family:Georgia,serif; font-size:10px; font-weight:700; letter-spacing:.22em; text-align:center; }
+    .post-line .intro { position:relative; overflow:hidden; background:linear-gradient(145deg,#0b5b96 0%,#073f78 48%,#062d5c 100%); }
+    .post-line .intro::before { content:""; position:absolute; top:-105px; right:-90px; width:230px; height:230px; border:1px solid rgb(255 255 255/.1); border-radius:50%; }
+    .post-line .intro::after { content:""; position:absolute; bottom:-125px; left:-105px; width:245px; height:245px; border:1px solid rgb(255 255 255/.08); border-radius:50%; }
+    .post-line .intro-copy { position:relative; z-index:1; padding:36px 22px 31px; color:#fff; text-align:center; }
+    .post-line .intro-copy h1 { margin:0; font-size:25px; line-height:1.42; letter-spacing:-.04em; }
+    .post-line .intro-copy h1 strong { display:inline-block; padding-bottom:3px; color:var(--pl-yellow); font-size:31px; border-bottom:2px solid var(--pl-yellow); }
+    .post-line .intro-copy p { margin:13px 0 0; color:#ddecf7; font-size:11px; line-height:1.8; }
+    .post-line .reasons { padding:34px 16px 38px; background:linear-gradient(180deg,#fff 0%,var(--pl-pale) 100%); }
+    .post-line .reasons h2 { width:100%; margin:7px auto 25px; color:var(--pl-navy); font-size:25px; line-height:1.45; text-align:center; letter-spacing:-.05em; }
+    .post-line .reasons h2 .marker { background:linear-gradient(transparent 72%,var(--pl-yellow) 72%); }
+    .post-line .reason-list { width:100%; margin:0 auto; display:grid; gap:14px; }
+    .post-line .reason { position:relative; overflow:hidden; background:#fff; border:1px solid #cbdde9; box-shadow:0 7px 18px rgb(12 67 106/.09); }
+    .post-line .reason-no { position:absolute; z-index:2; top:0; left:0; width:51px; height:51px; display:grid; place-items:center; color:#fff; background:var(--pl-navy); font-family:Georgia,serif; font-size:20px; }
+    .post-line .reason-photo { position:relative; height:165px; overflow:hidden; }
+    .post-line .reason-photo img { width:100%; height:100%; object-fit:cover; object-position:center 37%; }
+    .post-line .reason-photo.negotiation img { object-position:center center; }
+    .post-line .reason-photo.line-check img { object-position:center 8%; }
+    .post-line .generated-phone { position:absolute; z-index:2; top:4px; right:13px; width:auto!important; height:158px!important; object-fit:contain!important; filter:drop-shadow(0 5px 7px rgb(0 0 0/.3)); }
+    .post-line .reason-body { padding:20px 22px 22px; }
+    .post-line .reason.featured .reason-body { padding-top:18px; }
+    .post-line .reason h3 { margin:0; color:var(--pl-navy); font-size:18px; line-height:1.45; letter-spacing:-.04em; }
+    .post-line .reason h3 .accent { color:var(--pl-orange); font-size:22px; }
+    .post-line .reason h3::after { content:""; display:block; width:38px; height:3px; margin:11px 0 12px; background:var(--pl-yellow); }
+    .post-line .reason p { margin:0; color:#405164; font-size:11px; line-height:1.75; font-weight:500; }
+    .post-line .trust-note { margin:22px 0 0; padding:12px 14px; color:#254766; background:#fff; border-left:4px solid var(--pl-blue); font-size:10px; line-height:1.6; }
+    .post-line .faq { padding:38px 16px 42px; background:#fff; }
+    .post-line .faq h2 { margin:5px 0 24px; color:var(--pl-navy); font-size:28px; text-align:center; }
+    .post-line .faq h2::after { content:""; display:block; width:52px; height:4px; margin:10px auto 0; background:var(--pl-orange); }
+    .post-line .faq-list { display:grid; gap:10px; }
+    .post-line .faq-item { overflow:hidden; border:1px solid #cbdce8; border-radius:7px; background:#fff; }
+    .post-line .faq-q { display:grid; grid-template-columns:34px 1fr 18px; align-items:center; gap:7px; min-height:61px; padding:10px 12px; color:var(--pl-navy); font-size:12px; font-weight:800; line-height:1.45; background:#eff9ff; }
+    .post-line .faq-q b { width:30px; height:30px; display:grid; place-items:center; color:#fff; background:var(--pl-navy); border-radius:50%; font-family:Georgia,serif; font-size:16px; }
+    .post-line .faq-q i { color:var(--pl-blue); font-size:21px; font-style:normal; font-weight:400; }
+    .post-line .faq-a { display:grid; grid-template-columns:34px 1fr; gap:7px; padding:13px 12px 15px; border-top:1px solid #cfe4ef; color:#4a5866; font-size:10px; font-weight:500; line-height:1.7; }
+    .post-line .faq-a b { color:var(--pl-orange); font-family:Georgia,serif; font-size:20px; text-align:center; }
+    .post-line .final-cta { position:relative; padding:38px 18px 31px; overflow:hidden; color:#fff; background:linear-gradient(145deg,#0a477d,#062e5c); text-align:center; }
+    .post-line .final-cta::before { content:""; position:absolute; top:-70px; right:-78px; width:210px; height:210px; border:1px solid rgb(255 255 255/.1); border-radius:50%; }
+    .post-line .final-cta .mini { margin:0 0 8px; color:#bfe4f9; font-size:11px; }
+    .post-line .final-cta h2 { position:relative; margin:0; color:#fff; font-size:23px; line-height:1.5; letter-spacing:-.04em; }
+    .post-line .final-cta h2 strong { color:var(--pl-yellow); font-size:28px; }
+    .post-line .final-cta .document { width:86%; margin:20px auto 13px; padding:11px 12px; color:var(--pl-navy); background:var(--pl-yellow); border:2px solid #fff; box-shadow:0 4px 0 rgb(0 0 0/.17); font-size:15px; font-weight:900; }
+    .post-line .final-cta > p { margin:0 0 17px; color:#ddecf7; font-size:10px; line-height:1.65; }
+    .post-line .line-button { position:relative; min-height:66px; display:flex; align-items:center; justify-content:center; gap:11px; color:#fff; background:linear-gradient(#3bd16c,#16ad4d); border-radius:34px; box-shadow:0 7px 16px rgb(0 0 0/.2); font-size:19px; font-weight:900; text-decoration:none; }
+    .post-line .line-icon { width:44px; height:44px; flex:0 0 44px; display:grid; place-items:center; background:#fff; border-radius:10px; }
+    .post-line .line-icon img { width:40px; height:40px; display:block; object-fit:contain; }
+    .post-line .line-button::after { content:"›"; position:absolute; right:18px; font-size:32px; font-weight:400; }
+    .post-line .pl-office { padding:25px 18px 92px; background:#f3f6f8; text-align:center; }
+    .post-line .office-logo { display:flex; align-items:center; justify-content:center; gap:10px; color:var(--pl-navy); font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:17px; }
+    .post-line .office-mark { width:40px; height:40px; display:grid; place-items:center; color:#fff; background:var(--pl-navy); border-radius:50%; font-size:17px; }
+    .post-line .pl-office dl { display:grid; grid-template-columns:74px 1fr; margin:18px 0 0; border-top:1px solid #cdd5db; color:#53616d; font-size:9px; line-height:1.5; text-align:left; }
+    .post-line .pl-office dt,.post-line .pl-office dd { margin:0; padding:8px 5px; border-bottom:1px solid #cdd5db; }
+    .post-line .pl-office dt { font-weight:800; }
+    .post-line .pl-office dd { border-left:1px solid #cdd5db; }
+    .post-line .copyright { margin:15px 0 0; color:#83909a; font-size:8px; }
+
+    .sticky { position:fixed; z-index:20; left:50%; bottom:max(10px,env(safe-area-inset-bottom)); width:min(calc(100% - 28px),374px); min-height:62px; transform:translateX(-50%); display:flex; align-items:center; justify-content:center; gap:9px; padding:12px 48px 10px 22px; color:#fff; background:linear-gradient(180deg,#24cc68 0%,#08ac4d 100%); border:1px solid #4add83; border-radius:34px; box-shadow:0 6px 16px rgb(0 78 36/.3); font-size:19px; font-weight:900; text-decoration:none; }
+    .sticky::before { content:"10秒で簡単診断"; position:absolute; z-index:4; left:50%; top:-18px; min-width:190px; transform:translateX(-50%); padding:5px 18px 4px; color:#079848; background:#fff; border:1.5px solid #13b958; border-radius:18px; box-shadow:0 2px 6px rgb(0 0 0/.12); font-size:11px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap; }
+    .sticky::after { content:"›"; position:absolute; z-index:3; right:17px; width:23px; height:23px; display:grid; place-items:center; color:#0bab4d; background:#fff; border-radius:50%; font-size:25px; font-weight:700; line-height:1; }
+    .sticky > span,.official-line-icon { position:relative; z-index:3; }
+    .official-line-icon { width:40px; height:40px; padding:2px; object-fit:contain; background:#fff; border-radius:10px; }
+    .sticky-shine { position:absolute; z-index:2; inset:0; overflow:hidden; border-radius:inherit; pointer-events:none; }
+    .sticky-shine::before { content:""; position:absolute; top:-35%; bottom:-35%; left:-40%; width:22%; background:linear-gradient(90deg,transparent,rgb(255 255 255/.12),rgb(255 255 255/.76),rgb(255 255 255/.12),transparent); transform:translateX(-180%) skewX(-18deg); animation:lp-shine-sweep 4.8s ease-in-out 1.2s infinite; }
+
+    html.motion-ready .reveal-section { opacity:0; transform:translateY(28px); transition:opacity .72s ease,transform .72s cubic-bezier(.22,.75,.2,1); will-change:opacity,transform; }
+    html.motion-ready .reveal-section.reveal-left { transform:translateX(-28px); }
+    html.motion-ready .reveal-section.reveal-right { transform:translateX(28px); }
+    html.motion-ready .reveal-section.is-visible { opacity:1; transform:translate3d(0,0,0); }
+
+    .lp-popup[hidden] { display:none; }
+    .lp-popup { position:fixed; z-index:100; inset:0; display:grid; place-items:center; padding:20px 14px 78px; background:rgb(4 21 38/.67); backdrop-filter:blur(2px); opacity:0; transition:opacity .24s ease; }
+    .lp-popup.is-open { opacity:1; }
+    .lp-popup-card { position:relative; width:min(100%,374px); padding:0 0 14px; color:#17283b; background:#fff; box-shadow:0 16px 42px rgb(0 0 0/.42); outline:0; transform:translateY(14px) scale(.97); transition:transform .28s ease; }
+    .lp-popup.is-open .lp-popup-card { transform:translateY(0) scale(1); }
+    .lp-popup-shine { position:absolute; z-index:8; inset:0; overflow:hidden; pointer-events:none; }
+    .lp-popup-shine::before { content:""; position:absolute; top:-30%; bottom:-30%; left:-42%; width:24%; background:linear-gradient(90deg,transparent,rgb(255 255 255/.18),rgb(255 255 255/.78),rgb(255 255 255/.18),transparent); transform:translateX(-180%) skewX(-18deg); filter:blur(.4px); animation:lp-shine-sweep 4.8s ease-in-out 1.2s infinite; }
+    @keyframes lp-shine-sweep { 0%,68%{transform:translateX(-180%) skewX(-18deg);opacity:0}72%{opacity:1}88%{transform:translateX(700%) skewX(-18deg);opacity:1}92%,100%{transform:translateX(700%) skewX(-18deg);opacity:0} }
+    .lp-popup-close { position:absolute; z-index:10; left:50%; bottom:-62px; transform:translateX(-50%); padding:5px 9px; color:#fff; background:transparent; border:0; font-family:Arial,sans-serif; font-size:28px; font-weight:700; line-height:1; white-space:nowrap; text-shadow:0 2px 7px #000; cursor:pointer; }
+    .lp-popup-visual { position:relative; height:162px; overflow:hidden; background:#0a3c6f; }
+    .lp-popup-visual img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 30%; }
+    .lp-popup-content { position:relative; z-index:3; margin-top:-12px; padding:0 14px; }
+    .lp-popup-kicker { position:relative; width:max-content; margin:0 auto 8px; padding:8px 20px; color:#fff; background:#f04422; border-radius:7px; font-size:14px; font-weight:900; letter-spacing:.03em; text-align:center; }
+    .lp-popup-kicker::after { content:""; position:absolute; left:50%; bottom:-8px; transform:translateX(-50%); border-left:9px solid transparent; border-right:9px solid transparent; border-top:9px solid #f04422; }
+    .lp-popup-title { margin:0; color:#073568; font-family:"Yu Mincho","Hiragino Mincho ProN",serif; font-size:34px; line-height:1.1; letter-spacing:-.07em; text-align:center; }
+    .lp-popup-title .top { display:inline-block; background:linear-gradient(transparent 74%,#ffe04d 74%); }
+    .lp-popup-title strong { display:inline; color:#ef3f16; font-size:38px; }
+    .lp-popup-lead { margin:7px 0 11px; color:#153252; font-size:11px; font-weight:900; line-height:1.45; text-align:center; }
+    .lp-popup-cta { position:relative; min-height:67px; display:flex; align-items:center; justify-content:center; gap:11px; color:#fff; background:linear-gradient(100deg,#04b844,#00c650); border-radius:5px; box-shadow:0 4px 0 #078d3c; font-size:21px; font-weight:900; text-decoration:none; }
+    .lp-popup-line-icon { width:50px; height:50px; padding:2px; flex:0 0 50px; object-fit:contain; background:#fff; border-radius:10px; }
+    .lp-popup-cta::after { content:"›"; position:absolute; right:13px; font-size:38px; font-weight:400; }
+    @media (max-width:374px) { .header{height:66px} .logo{width:42px;height:42px} .office{font-size:17px} .team-photo{height:265px} .message{padding:14px 15px} .message h1{font-size:28px} .message h1 .red{font-size:21px} .check-panel{padding-inline:16px} .check-item{font-size:16px} }
+    @media (min-width:700px) { body{padding:28px 0} .sticky{bottom:28px} }
+    @media (max-height:700px) { .lp-popup{padding-bottom:64px}.lp-popup-card{width:min(100%,366px)}.lp-popup-visual{height:150px}.lp-popup-content{margin-top:-10px}.lp-popup-kicker{padding-block:6px}.lp-popup-title{font-size:32px}.lp-popup-title strong{font-size:35px}.lp-popup-lead{font-size:10px}.lp-popup-cta{min-height:62px;font-size:19px}.lp-popup-close{bottom:-55px} }
+    @media (prefers-reduced-motion:reduce) { .lp-popup,.lp-popup-card{transition:none}.lp-popup-shine::before,.sticky-shine::before{animation:none}html.motion-ready .reveal-section{opacity:1;transform:none;transition:none} }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="logo">仮</div>
+      <div class="office">弁護士法人［法人名］<small>TRAFFIC ACCIDENT SUPPORT</small></div>
+      <div class="menu" aria-hidden="true"><i></i><i></i><i></i></div>
+    </header>
+
+    <section class="team-photo" aria-label="示談金について相談する様子">
+      <div class="target">まだ弁護士に依頼していない方へ</div>
+      <div class="team-caption">示談金の提示書を確認する<b>交通事故相談チーム</b></div>
+    </section>
+
+    <section class="message">
+      <p class="intro">保険会社から提示書が届いた方へ</p>
+      <h1>その示談金、<span class="blue">この金額で</span><br>よいのでしょうか？<span class="red">正当な賠償額を無料でチェック</span></h1>
+      <p class="lead">提示額に同意する前に、弁護士と一緒に内容を確認できます。</p>
+    </section>
+
+    <section class="check-panel">
+      <h2>LINEで確認できる<strong>3つの内容</strong></h2>
+      <div class="check-list">
+        <div class="check-item"><span class="checkmark">✓</span><span><b>提示額</b>が適正か確認</span></div>
+        <div class="check-item"><span class="checkmark">✓</span><span><b>増額の可能性</b>を確認</span></div>
+        <div class="check-item"><span class="checkmark">✓</span><span><b>弁護士費用</b>の見通しを確認</span></div>
+      </div>
+    </section>
+
+    <section class="offer" id="line-c">
+      <div class="yellow-box">提示書は手元にありますか？</div>
+      <p>まずはLINEで状況をお聞かせください</p>
+    </section>
+    <div class="legal">※無料の対象・範囲は確認中。増額を保証するものではありません。写真はイメージです。</div>
+
+    <section class="case-section" aria-labelledby="case-heading">
+      <h2 class="section-heading" id="case-heading"><small>SOLUTION CASE</small>解決事例</h2>
+      <div class="carousel-wrap" data-carousel>
+        <div class="case-viewport" data-carousel-viewport aria-label="解決事例カルーセル">
+          <div class="case-track">
+            <article class="case-slide">
+              <div class="case-head">
+                <div class="case-meta"><b>比較例</b><span>後遺障害等級14級</span></div>
+                <h3>基準によって賠償額が変わる比較例</h3>
+                <p class="accident-line">事故内容：後遺障害等級14級を想定した基準比較</p>
+              </div>
+              <div class="case-data">
+                <div class="data-row"><span>ご自身で対応<br>自賠責基準</span><strong>32万円</strong></div>
+                <div class="data-row"><span>弁護士が対応<br>裁判基準</span><strong>110万円</strong></div>
+              </div>
+              <div class="down-arrow" aria-hidden="true"></div>
+              <div class="result-box"><span>確認後の金額</span><strong>110万円</strong></div>
+              <div class="mini-chart" aria-label="32万円から110万円へ約3.4倍になる棒グラフ">
+                <div class="up-balloon">約3.4倍</div>
+                <div class="mini-bar before"><b>32</b><small>万円</small><em>確認前</em></div>
+                <div class="mini-bar after"><b>110</b><small>万円</small><em>確認後</em></div>
+              </div>
+            </article>
+
+            <article class="case-slide">
+              <div class="case-head">
+                <div class="case-meta"><b>首・腕</b><span>後遺障害14級</span></div>
+                <h3>［むちうち］後遺障害14級・340万円の公開事例</h3>
+                <p class="accident-line">事故内容：追突事故によるむちうち（頸椎捻挫）</p>
+              </div>
+              <div class="case-data">
+                <div class="data-row"><span>確認前の金額</span><strong>0万円</strong></div>
+                <div class="data-row"><span>後遺障害等級</span><strong>14級</strong></div>
+              </div>
+              <div class="down-arrow" aria-hidden="true"></div>
+              <div class="result-box"><span>確認後の金額</span><strong>340万円</strong></div>
+              <div class="mini-chart" aria-label="サポート前0万円から最終獲得額340万円になった他社公開事例の仮表示">
+                <div class="up-balloon">340万円<br>UP</div>
+                <div class="mini-bar before"><b>0</b><small>万円</small><em>確認前</em></div>
+                <div class="mini-bar after"><b>340</b><small>万円</small><em>確認後</em></div>
+              </div>
+            </article>
+
+            <article class="case-slide">
+              <div class="case-head">
+                <div class="case-meta"><b>頭部</b><span>後遺障害9級</span></div>
+                <h3>［高次脳機能障害］9級認定・4320万円の公開事例</h3>
+                <p class="accident-line">事故内容：車外で会話中、後方車両にはねられた事故</p>
+              </div>
+              <div class="case-data">
+                <div class="data-row"><span>確認前の金額</span><strong>―</strong></div>
+                <div class="data-row"><span>認定された等級</span><strong>9級</strong></div>
+              </div>
+              <div class="down-arrow" aria-hidden="true"></div>
+              <div class="result-box"><span>確認後の金額</span><strong>4320万円</strong></div>
+              <div class="mini-chart" aria-label="最終獲得額4320万円、後遺障害9級の他社公開事例の仮表示">
+                <div class="up-balloon">4320万円<br>獲得</div>
+                <div class="mini-bar before"><b>―</b><em>確認前</em></div>
+                <div class="mini-bar after"><b>4320</b><small>万円</small><em>確認後</em></div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <button class="carousel-button prev" type="button" data-carousel-prev aria-label="前の事例">‹</button>
+        <button class="carousel-button next" type="button" data-carousel-next aria-label="次の事例">›</button>
+        <div class="carousel-dots" aria-label="事例の位置">
+          <button class="carousel-dot active" type="button" aria-label="事例1を表示"></button>
+          <button class="carousel-dot" type="button" aria-label="事例2を表示"></button>
+          <button class="carousel-dot" type="button" aria-label="事例3を表示"></button>
+        </div>
+      </div>
+      <p class="case-note">※比較例は改正民法施行後（令和2年4月1日以降）の交通事故を想定しています。事例02・03は他社の公開事例を参考にしたデザイン確認用の仮表示であり、本番公開前に当法人の実績へ差し替えます。個別の結果を保証するものではありません。</p>
+    </section>
+
+    <section class="benefit-section" aria-labelledby="benefit-heading">
+      <div class="benefit-hero">
+        <p class="benefit-kicker">交通事故に強い「プロ」が</p>
+        <h2 class="benefit-title" id="benefit-heading"><span class="red">解決</span><span class="marker">します！</span></h2>
+      </div>
+      <div class="benefit-body">
+        <p class="benefit-stop">提示額に同意する前に、少しお待ちください。</p>
+        <p class="benefit-consult">無料で金額が適正か<span class="consult-main">弁護士に確認できます。</span></p>
+        <p class="benefit-copy">後遺障害等級の認定や賠償額の算定には、専門的な判断が必要です。弁護士が資料と事故状況を確認し、裁判基準（弁護士基準）を踏まえて請求できる金額を検討します。</p>
+        <p class="benefit-reason">保険会社から届いた提示額が<br>適正な金額とは限りません。</p>
+        <p class="benefit-detail">交通事故の賠償額には、自賠責保険基準・任意保険基準・裁判基準（弁護士基準）などの考え方があります。どの基準で検討するかによって、算定額が変わることがあります。</p>
+        <div class="criteria" id="criteria" aria-label="自賠責保険基準、任意保険基準、裁判基準の3つの算定基準">
+          <div class="criterion">
+            <span class="criterion-number">01</span>
+            <span class="criterion-text"><strong>自賠責保険基準</strong><small>基本的な補償を目的とする基準</small></span>
+          </div>
+          <span class="criterion-arrow" aria-hidden="true"></span>
+          <div class="criterion">
+            <span class="criterion-number">02</span>
+            <span class="criterion-text"><strong>任意保険基準</strong><small>保険会社が独自に設けている基準</small></span>
+          </div>
+          <span class="criterion-arrow" aria-hidden="true"></span>
+          <div class="criterion featured">
+            <span class="criterion-number">03</span>
+            <span class="criterion-text"><strong>裁判基準（弁護士基準）</strong><small>過去の裁判例をもとに検討する基準</small></span>
+          </div>
+        </div>
+        <p class="criteria-caption">※金額や認定結果は事故状況・症状・証拠などにより異なります。</p>
+      </div>
+
+    <section class="compare-section" aria-labelledby="compare-heading">
+      <h2 class="compare-heading" id="compare-heading">弁護士に<span class="red">頼む場合</span>と<br>頼まない場合の違い</h2>
+      <p class="compare-lead">提示額の確認から保険会社とのやり取りまで、<br>対応方法が変わります。</p>
+
+      <div class="compare-cards" aria-label="弁護士に頼む場合と頼まない場合の比較">
+        <div class="compare-labels" aria-hidden="true">
+          <span class="compare-label-spacer"></span>
+          <span class="compare-side-label">賠償金</span>
+          <span class="compare-side-label">交渉</span>
+          <span class="compare-side-label">後遺障害<br>等級認定</span>
+        </div>
+
+        <article class="compare-card">
+          <h3 class="compare-card-title">弁護士に頼まない</h3>
+          <div class="compare-item"><strong>保険会社の提示額を<br>自分で判断する</strong></div>
+          <div class="compare-item"><strong>保険会社と<br>自分でやり取りする</strong></div>
+          <div class="compare-item"><strong>必要資料や申請手続きを<br>自分で確認する</strong></div>
+        </article>
+
+        <article class="compare-card lawyer-card">
+          <h3 class="compare-card-title">弁護士に頼む</h3>
+          <div class="compare-item"><span class="good">✓</span><strong><span class="orange">裁判基準</span>を踏まえて<br><span class="orange">請求額</span>を検討</strong></div>
+          <div class="compare-item"><span class="good">✓</span><strong>保険会社との交渉を<br><span class="orange">弁護士に任せられる</span></strong></div>
+          <div class="compare-item"><span class="good">✓</span><strong><span class="orange">申請資料や認定手続</span>を<br>相談できる</strong></div>
+        </article>
+      </div>
+      <p class="compare-note">※対応内容や結果は、事故状況・契約内容・証拠などによって異なります。</p>
+    </section>
+    </section>
+
+    <section class="rider-section" aria-labelledby="rider-heading">
+      <p class="rider-eyebrow">LEGAL EXPENSES COVERAGE</p>
+      <h2 class="rider-heading" id="rider-heading">弁護士費用特約が使える場合<br><span class="yellow">弁護士費用の負担を抑えられます</span></h2>
+      <div class="rider-zero"><strong>実質0円</strong><span>になることも※</span></div>
+      <p class="rider-copy">自動車保険などに付帯している特約から、<br>弁護士への相談・依頼費用が補償される場合があります。</p>
+      <div class="rider-limits" aria-label="弁護士費用特約の一般的な補償例">
+        <div class="rider-limit"><small>弁護士費用</small><strong>300</strong><span>万円まで</span></div>
+        <div class="rider-limit"><small>法律相談費用</small><strong>10</strong><span>万円まで</span></div>
+      </div>
+      <p class="rider-check">ご自身やご家族の保険証券をご確認ください</p>
+      <p class="rider-note">※上記は一般的な補償例です。補償対象・限度額・事前承認の要否は保険会社や契約内容によって異なります。補償上限を超える費用など、自己負担が生じる場合があります。利用前に保険会社へご確認ください。</p>
+    </section>
+
+    <section class="steps-section" aria-labelledby="steps-heading">
+      <p class="steps-eyebrow">3 EASY STEPS</p>
+      <h2 class="steps-heading" id="steps-heading">LINE無料チェックの流れ</h2>
+      <p class="steps-lead">相談はかんたん3ステップ</p>
+
+      <div class="steps-list">
+        <article class="step-card" id="step-01">
+          <span class="step-badge">STEP<strong>01</strong></span>
+          <div class="step-copy">
+            <h3>LINEで友だち追加</h3>
+            <p>ボタンをタップして<br>相談窓口を追加</p>
+          </div>
+          <img class="step-visual one" src="assets/step-01-add-friend.png" alt="スマートフォンで友だち追加するイメージ">
+        </article>
+
+        <span class="step-connector" aria-hidden="true"></span>
+
+        <article class="step-card" id="step-02">
+          <span class="step-badge">STEP<strong>02</strong></span>
+          <div class="step-copy">
+            <h3>3つの質問に回答</h3>
+            <p>事故の状況を選んで<br>答えるだけ</p>
+          </div>
+          <img class="step-visual two" src="assets/step-02-questions.png" alt="LINEで3つの質問に回答するイメージ">
+        </article>
+
+        <span class="step-connector" aria-hidden="true"></span>
+
+        <article class="step-card" id="step-03">
+          <span class="step-badge">STEP<strong>03</strong></span>
+          <div class="step-copy">
+            <h3>提示書を送って<br>弁護士が確認</h3>
+            <p>スマホで撮影した書類を<br>LINEで送信</p>
+          </div>
+          <img class="step-visual three" src="assets/step-03-lawyer-review.png" alt="提示書を撮影して弁護士に送るイメージ">
+        </article>
+      </div>
+
+      <p class="steps-assurance">依頼するか決めていなくても確認できます</p>
+      <a class="steps-cta" href="#line-c"><img class="official-line-icon" src="assets/line-official-icon.png" alt="LINE">LINEで無料チェック</a>
+    </section>
+
+    <div class="post-line">
+    <section class="intro">
+      <div class="intro-copy serif">
+        <h1>交通事故のご相談は<br><strong>私たちにお任せください</strong></h1>
+        <p>保険会社から提示された金額を、事故状況や資料をもとに弁護士が確認します。</p>
+      </div>
+    </section>
+
+    <section class="reasons">
+      <p class="eyebrow">WHY CHOOSE US</p>
+      <h2 class="serif">示談金の確認を<br><span class="marker">安心して任せられる3つの理由</span></h2>
+      <div class="reason-list">
+        <article class="reason featured">
+          <span class="reason-no">01</span>
+          <div class="reason-photo"><img src="assets/fv-team-hybrid.png" alt="交通事故について相談する弁護士のイメージ"></div>
+          <div class="reason-body">
+            <h3 class="serif"><span class="accent">交通事故に特化</span>した弁護士</h3>
+            <p>交通事故の賠償額は、治療期間や過失割合、休業損害、後遺障害等級など、さまざまな事情によって変わります。交通事故案件に注力する弁護士が、保険会社から届いた提示書と事故資料を確認。裁判基準（弁護士基準）を踏まえ、提示額の考え方や確認しておきたい点を分かりやすくお伝えします。示談書へ署名する前に、まずは内容を整理できます。</p>
+          </div>
+        </article>
+
+        <article class="reason featured">
+          <span class="reason-no">02</span>
+          <div class="reason-photo negotiation"><img src="assets/reason-02-lawyer-review.png" alt="交通事故の提示額について説明する弁護士のイメージ"></div>
+          <div class="reason-body">
+            <h3 class="serif">提示額を<br><span class="accent">裁判基準で検討できる</span></h3>
+            <p>保険会社から提示された金額が、必ずしも裁判基準（弁護士基準）と同じとは限りません。提示書に記載された慰謝料・休業損害・逸失利益などの項目を確認し、算定方法や請求漏れがないかを整理します。そのうえで、事故状況や資料をもとに、提示額を見直せる可能性や今後の対応について個別に検討します。</p>
+          </div>
+        </article>
+
+        <article class="reason featured">
+          <span class="reason-no">03</span>
+          <div class="reason-photo line-check">
+            <img src="assets/fv-people-variant-b.png" alt="届いた提示書を確認する相談者のイメージ">
+            <img class="generated-phone" src="assets/line-consultation-phone.png" alt="弁護士相談窓口へ示談金提示書を送っているスマートフォン画面">
+          </div>
+          <div class="reason-body">
+            <h3 class="serif">依頼を決める前でも<br><span class="accent">LINEで無料で確認できる</span></h3>
+            <p>LINEで友だち追加後、事故の状況に関する3つの質問へ回答し、保険会社から届いた提示書をスマホで撮影して送信してください。事務所へ出向く前に、弁護士が提示内容を確認します。まだ依頼するか決めていない段階でも利用できるため、まずは金額が適正か、相談する必要があるかを確認するところから始められます。</p>
+          </div>
+        </article>
+      </div>
+      <p class="trust-note">※弁護士名・実績・対応地域は確認後に正式な情報へ差し替えます。</p>
+    </section>
+
+    <section class="faq">
+      <p class="eyebrow">FREQUENTLY ASKED QUESTIONS</p>
+      <h2 class="serif">よくあるご質問</h2>
+      <div class="faq-list">
+        <article class="faq-item">
+          <div class="faq-q"><b>Q</b><span>まだ依頼を決めていなくても確認できますか？</span><i>−</i></div>
+          <div class="faq-a"><b>A</b><span>はい。まずは提示書の内容や事故状況を確認し、相談後に依頼するかご判断いただけます。</span></div>
+        </article>
+        <article class="faq-item">
+          <div class="faq-q"><b>Q</b><span>相談には何が必要ですか？</span><i>−</i></div>
+          <div class="faq-a"><b>A</b><span>保険会社から届いた提示書をご用意ください。事故状況が分かる資料、診断書、後遺障害等級の認定結果などもあれば、あわせてLINEから送信いただくと確認がスムーズです。</span></div>
+        </article>
+        <article class="faq-item">
+          <div class="faq-q"><b>Q</b><span>弁護士費用特約が使えるか分かりません。</span><i>−</i></div>
+          <div class="faq-a"><b>A</b><span>ご自身やご家族の自動車保険などに付帯している場合があります。保険証券や契約内容をご確認ください。対象範囲や利用条件は保険会社によって異なります。</span></div>
+        </article>
+        <article class="faq-item">
+          <div class="faq-q"><b>Q</b><span>提示額が必ず増えるのでしょうか？</span><i>−</i></div>
+          <div class="faq-a"><b>A</b><span>増額を保証するものではありません。事故状況、けがの内容、過失割合、資料などを確認したうえで、提示額の考え方や見直せる可能性を個別に検討します。</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <p class="mini">提示額に同意する前に</p>
+      <h2 class="serif">その示談金が適正か<br><strong>弁護士と一緒に確認</strong></h2>
+      <div class="document">提示書は手元にありますか？</div>
+      <p>スマホで撮影した提示書をLINEで送信。<br>依頼するか決めていなくても確認できます。</p>
+      <a class="line-button" href="#"><span class="line-icon"><img src="assets/line-official-icon.png" alt="LINE"></span>LINEで無料チェック</a>
+    </section>
+
+    <footer class="pl-office">
+      <div class="office-logo"><span class="office-mark">仮</span><span>弁護士法人［法人名］</span></div>
+      <dl>
+        <dt>所在地</dt><dd>［確認後に掲載］</dd>
+        <dt>対応地域</dt><dd>［確認後に掲載］</dd>
+        <dt>受付時間</dt><dd>［確認後に掲載］</dd>
+      </dl>
+      <p class="copyright">© LAW OFFICE. ALL RIGHTS RESERVED.</p>
+    </footer>
+      </div>
+  </main>
+
+  <div class="lp-popup" id="settlement-popup" hidden aria-hidden="true">
+    <section class="lp-popup-card" role="dialog" aria-modal="true" aria-labelledby="settlement-popup-title" tabindex="-1">
+      <button class="lp-popup-close" type="button" aria-label="ポップアップを閉じる">× Close</button>
+      <div class="lp-popup-shine" aria-hidden="true"></div>
+      <div class="lp-popup-visual">
+        <img src="assets/popup-lawyer-consultation.png" alt="提示書を確認する相談者と弁護士のイメージ">
+      </div>
+      <div class="lp-popup-content">
+        <p class="lp-popup-kicker">提示額に同意する前に</p>
+        <h2 class="lp-popup-title" id="settlement-popup-title"><span class="top">提示書は</span><br><strong>手元</strong>にありますか？</h2>
+        <p class="lp-popup-lead">その示談金が適正か、弁護士に確認できます。</p>
+        <a class="lp-popup-cta" href="#line-c"><img class="lp-popup-line-icon" src="assets/line-official-icon.png" alt="LINE">LINEで無料診断</a>
+      </div>
+    </section>
+  </div>
+
+  <a class="sticky" href="#line-c"><i class="sticky-shine" aria-hidden="true"></i><img class="official-line-icon" src="assets/line-official-icon.png" alt="LINE"><span>LINEで適正金額を確認する</span></a>
+  <script>
+    (() => {
+      const root = document.querySelector('[data-carousel]');
+      const viewport = root?.querySelector('[data-carousel-viewport]');
+      const slides = [...(root?.querySelectorAll('.case-slide') || [])];
+      const dots = [...(root?.querySelectorAll('.carousel-dot') || [])];
+      if (!viewport || slides.length < 2) return;
+
+      let index = 0;
+      let timer;
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const show = (nextIndex, smooth = true) => {
+        index = (nextIndex + slides.length) % slides.length;
+        const slide = slides[index];
+        const left = slide.offsetLeft - (viewport.clientWidth - slide.offsetWidth) / 2;
+        viewport.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      };
+
+      const stop = () => clearInterval(timer);
+      const start = () => {
+        stop();
+        if (!reducedMotion) timer = setInterval(() => show(index + 1), 4500);
+      };
+
+      root.querySelector('[data-carousel-prev]').addEventListener('click', () => { show(index - 1); start(); });
+      root.querySelector('[data-carousel-next]').addEventListener('click', () => { show(index + 1); start(); });
+      dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); start(); }));
+      viewport.addEventListener('pointerdown', stop);
+      viewport.addEventListener('pointerup', start);
+      document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+      addEventListener('resize', () => show(index, false));
+
+      show(0, false);
+      start();
+    })();
+
+    (() => {
+      const popup = document.getElementById('settlement-popup');
+      const card = popup?.querySelector('.lp-popup-card');
+      const closeButton = popup?.querySelector('.lp-popup-close');
+      const popupCta = popup?.querySelector('.lp-popup-cta');
+      const triggerSection = document.querySelector('.rider-section');
+      if (!popup || !card || !closeButton || !popupCta || !triggerSection) return;
+
+      const storageKey = 'settlementPopupDismissed';
+      const wasDismissed = () => {
+        try { return sessionStorage.getItem(storageKey) === '1'; }
+        catch (_) { return false; }
+      };
+      const rememberDismissal = () => {
+        try { sessionStorage.setItem(storageKey, '1'); }
+        catch (_) {}
+      };
+
+      let timeReady = false;
+      let sectionReady = false;
+      let opened = false;
+
+      const showPopup = () => {
+        if (opened || wasDismissed() || !timeReady || !sectionReady) return;
+        opened = true;
+        popup.hidden = false;
+        popup.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          popup.classList.add('is-open');
+          card.focus({ preventScroll: true });
+        });
+      };
+
+      const hidePopup = (remember = true) => {
+        if (popup.hidden) return;
+        if (remember) rememberDismissal();
+        popup.classList.remove('is-open');
+        popup.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => { popup.hidden = true; }, 260);
+      };
+
+      setTimeout(() => {
+        timeReady = true;
+        showPopup();
+      }, 8000);
+
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        sectionReady = true;
+        observer.disconnect();
+        showPopup();
+      }, { threshold: 0.2 });
+      observer.observe(triggerSection);
+
+      closeButton.addEventListener('click', () => hidePopup(true));
+      popup.addEventListener('click', (event) => {
+        if (event.target === popup) hidePopup(true);
+      });
+      addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !popup.hidden) hidePopup(true);
+      });
+      popupCta.addEventListener('click', () => hidePopup(true));
+
+      document.querySelectorAll('.sticky, .line-button').forEach((link) => {
+        link.addEventListener('click', rememberDismissal, { once: true });
+      });
+    })();
+
+    (() => {
+      const sections = [...document.querySelectorAll('.page > section, .post-line > section')];
+      if (!sections.length) return;
+
+      document.documentElement.classList.add('motion-ready');
+      sections.forEach((section, index) => {
+        section.classList.add('reveal-section');
+        if (index % 3 === 1) section.classList.add('reveal-left');
+        if (index % 3 === 2) section.classList.add('reveal-right');
+      });
+
+      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        sections.forEach((section) => section.classList.add('is-visible'));
+        return;
+      }
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold:0.12, rootMargin:'0px 0px -7% 0px' });
+
+      sections.forEach((section) => revealObserver.observe(section));
+    })();
+  </script>
+</body>
+</html>
